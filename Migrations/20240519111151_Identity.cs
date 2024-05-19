@@ -195,15 +195,14 @@ namespace DACS.Migrations
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Wo = table.Column<float>(type: "real", nullable: false),
                     Qo = table.Column<float>(type: "real", nullable: false),
-                    ApplicationUserId = table.Column<int>(type: "int", nullable: false),
-                    ApplicationUserId1 = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PhieuLayMaus", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PhieuLayMaus_AspNetUsers_ApplicationUserId1",
-                        column: x => x.ApplicationUserId1,
+                        name: "FK_PhieuLayMaus_AspNetUsers_EmployeeId",
+                        column: x => x.EmployeeId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -351,9 +350,9 @@ namespace DACS.Migrations
                 column: "ViTriLayMauId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PhieuLayMaus_ApplicationUserId1",
+                name: "IX_PhieuLayMaus_EmployeeId",
                 table: "PhieuLayMaus",
-                column: "ApplicationUserId1");
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ViTriLayMaus_DongSongId",

@@ -6,7 +6,6 @@ namespace DACS.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public int Id { get; set; }
         [Required]
         public string? FullName { get; set; }
         public string? Address { get; set; }
