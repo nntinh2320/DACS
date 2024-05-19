@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DACS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240519113757_Identity")]
+    [Migration("20240519114245_Identity")]
     partial class Identity
     {
         /// <inheritdoc />
