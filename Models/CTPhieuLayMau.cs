@@ -4,7 +4,7 @@ namespace DACS.Models
 {
     public class CTPhieuLayMau
     {
-        public string Id {  get; set; }
+        public string CTPhieuLayMauId {  get; set; }
         [Required]
         public int PhieuLayMauId { get; set; }
         public PhieuLayMau? PhieuLayMau { get; set; }

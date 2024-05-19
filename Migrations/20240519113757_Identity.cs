@@ -230,13 +230,13 @@ namespace DACS.Migrations
                 name: "CTPhieuLayMaus",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CTPhieuLayMauId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PhieuLayMauId = table.Column<int>(type: "int", nullable: false),
                     ViTriLayMauId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CTPhieuLayMaus", x => x.Id);
+                    table.PrimaryKey("PK_CTPhieuLayMaus", x => x.CTPhieuLayMauId);
                     table.ForeignKey(
                         name: "FK_CTPhieuLayMaus_PhieuLayMaus_PhieuLayMauId",
                         column: x => x.PhieuLayMauId,
@@ -255,34 +255,27 @@ namespace DACS.Migrations
                 name: "CTCacChats",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CTCacChatId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     WQI = table.Column<float>(type: "real", nullable: false),
                     MucDoONhiem = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ChatId = table.Column<int>(type: "int", nullable: false),
-                    CTPhieuLayMauId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ViTriLayMauId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    CTPhieuLayMauId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CTCacChats", x => x.Id);
+                    table.PrimaryKey("PK_CTCacChats", x => x.CTCacChatId);
                     table.ForeignKey(
                         name: "FK_CTCacChats_CTPhieuLayMaus_CTPhieuLayMauId",
                         column: x => x.CTPhieuLayMauId,
                         principalTable: "CTPhieuLayMaus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "CTPhieuLayMauId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CTCacChats_Chats_ChatId",
                         column: x => x.ChatId,
                         principalTable: "Chats",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CTCacChats_ViTriLayMaus_ViTriLayMauId",
-                        column: x => x.ViTriLayMauId,
-                        principalTable: "ViTriLayMaus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(
@@ -333,11 +326,6 @@ namespace DACS.Migrations
                 name: "IX_CTCacChats_CTPhieuLayMauId",
                 table: "CTCacChats",
                 column: "CTPhieuLayMauId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CTCacChats_ViTriLayMauId",
-                table: "CTCacChats",
-                column: "ViTriLayMauId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CTPhieuLayMaus_PhieuLayMauId",
