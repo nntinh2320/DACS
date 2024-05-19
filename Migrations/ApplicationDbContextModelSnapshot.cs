@@ -199,15 +199,12 @@ namespace DACS.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ApplicationUserId1")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<float>("Qo")
                         .HasColumnType("real");
@@ -217,7 +214,7 @@ namespace DACS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId1");
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("PhieuLayMaus");
                 });
@@ -422,13 +419,13 @@ namespace DACS.Migrations
 
             modelBuilder.Entity("DACS.Models.PhieuLayMau", b =>
                 {
-                    b.HasOne("DACS.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("DACS.Models.ApplicationUser", "Employee")
                         .WithMany("PhieuLayMau")
-                        .HasForeignKey("ApplicationUserId1")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("DACS.Models.ViTriLayMau", b =>

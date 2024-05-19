@@ -12,7 +12,7 @@ namespace DACS.Models
         [Required]
         public float Qo {  get; set; }
         [Required]
-        public int ApplicationUserId { get; set; }
-        public ApplicationUser? ApplicationUser { get; set; }
+        public string EmployeeId { get; set; }
+        public ApplicationUser Employee { get; set; }
     }
 }
