@@ -4,7 +4,7 @@ namespace DACS.Models
 {
     public class DongSong
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         [Required, StringLength(100)]
         public string Name { get; set; }
 
