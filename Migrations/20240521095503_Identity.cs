@@ -255,8 +255,9 @@ namespace DACS.Migrations
                 columns: table => new
                 {
                     CTCacChatId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    GiaTri = table.Column<float>(type: "real", nullable: false),
                     WQI = table.Column<float>(type: "real", nullable: false),
-                    MucDoONhiem = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MucDoONhiem = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ChatId = table.Column<int>(type: "int", nullable: false),
                     CTPhieuLayMauId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },

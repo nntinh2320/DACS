@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DACS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240521083231_Identity")]
+    [Migration("20240521095503_Identity")]
     partial class Identity
     {
         /// <inheritdoc />
@@ -115,8 +115,10 @@ namespace DACS.Migrations
                     b.Property<int>("ChatId")
                         .HasColumnType("int");
 
+                    b.Property<float>("GiaTri")
+                        .HasColumnType("real");
+
                     b.Property<string>("MucDoONhiem")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("WQI")

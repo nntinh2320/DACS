@@ -112,8 +112,10 @@ namespace DACS.Migrations
                     b.Property<int>("ChatId")
                         .HasColumnType("int");
 
+                    b.Property<float>("GiaTri")
+                        .HasColumnType("real");
+
                     b.Property<string>("MucDoONhiem")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("WQI")
