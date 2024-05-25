@@ -1,0 +1,84 @@
+﻿@model IEnumerable<DACS.Models.Chat>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Danh sách các Chất</h1>
+
+@using (Html.BeginForm())
+{
+    <div style="position: relative;">
+        <input type="text" id="txtSearchPlaceholder" style="position:
+    absolute; background-color: transparent; color: #ccc; z-index: -1; width:
+    50%;" disabled />
+        <input type="text" id="txtSearchca" name="searchString" style="position:
+    relative; background-color: transparent; z-index: 1; width: 50%;" /><input type="submit" value="Tìm kiếm" />
+    </div>
+}
+<script>
+    $(function () {
+        $("#txtSearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '@Url.Action("GetSearchValue", "Categories")',
+                    type: "POST",
+                    dataType: "json",
+                    data: { search: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.label, value: item.value };
+                        }));
+                        var firstMatch = data.find(item =>
+                            item.label.toLowerCase().startsWith(request.term.toLowerCase()));
+                        if (firstMatch) {
+                            $("#txtSearchPlaceholder").val(firstMatch.label);
+                        } else {
+                            $("#txtSearchPlaceholder").val('');
+                        }
+                    }
+                });
+            },
+            minLength: 1
+        }).keydown(function (event) {
+            if (event.keyCode === $.ui.keyCode.TAB &&
+                $("#txtSearchPlaceholder").val() !== '') {
+                event.preventDefault();
+                $(this).val($("#txtSearchPlaceholder").val());
+                $("#txtSearchPlaceholder").val('');
+            }
+        });
+    });
+</script>
+
+
+
+</table>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên Danh mục</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>
+                    <a href="@Url.Action("Display", "Chat", new { id = item.Id })" class="btn btn-info">Xem</a>
+                    <a href="@Url.Action("Update", "Chat", new { id = item.Id })" class="btn btn-primary">Sửa</a>
+                    <a href="@Url.Action("Delete", "Chat", new { id = item.Id })" class="btn btn-danger">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+
+</table>
+
+<a href="@Url.Action("Add", "Chat")" class="btn btn-success">Thêm mới</a>
