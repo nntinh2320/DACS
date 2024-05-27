@@ -12,7 +12,7 @@ namespace DACS.Models
         public int ChatId { get; set; }
         public Chat? Chat { get; set; }
         [Required]
-        public string CTPhieuLayMauId { get; set; }
-        public CTPhieuLayMau? CTPhieuLayMau { get; set; }
+        public int PhieuLayMauId { get; set; }
+        public PhieuLayMau? PhieuLayMau { get; set; }
     }
 }
