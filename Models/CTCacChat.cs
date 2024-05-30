@@ -4,7 +4,7 @@ namespace DACS.Models
 {
     public class CTCacChat
     {
-        public string CTCacChatId {  get; set; }
+        public int CTCacChatId {  get; set; }
         public float GiaTri {  get; set; }
         public float WQI { get; set; }
         public string? MucDoONhiem { get; set; }
@@ -12,7 +12,7 @@ namespace DACS.Models
         public int ChatId { get; set; }
         public Chat? Chat { get; set; }
         [Required]
-        public string CTPhieuLayMauId { get; set; }
-        public CTPhieuLayMau? CTPhieuLayMau { get; set; }
+        public int PhieuLayMauId { get; set; }
+        public PhieuLayMau? PhieuLayMau { get; set; }
     }
 }

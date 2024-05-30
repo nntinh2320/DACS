@@ -7,13 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Admin\**" />
     <Compile Remove="Areas\Employee\**" />
-    <Content Remove="Areas\Admin\**" />
     <Content Remove="Areas\Employee\**" />
-    <EmbeddedResource Remove="Areas\Admin\**" />
     <EmbeddedResource Remove="Areas\Employee\**" />
-    <None Remove="Areas\Admin\**" />
     <None Remove="Areas\Employee\**" />
   </ItemGroup>
 
@@ -28,6 +24,17 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Areas\Admin\Views\Table\AddDongSong.cshtml" />
+    <None Include="Areas\Admin\Views\Table\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Table\Test.cshtml" />
   </ItemGroup>
 
 </Project>
