@@ -31,4 +31,10 @@
     <Folder Include="Areas\Admin\Models\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Areas\Admin\Views\Table\AddDongSong.cshtml" />
+    <None Include="Areas\Admin\Views\Table\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Table\Test.cshtml" />
+  </ItemGroup>
+
 </Project>

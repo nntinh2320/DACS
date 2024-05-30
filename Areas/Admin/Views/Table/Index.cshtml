@@ -1,0 +1,27 @@
+﻿@model IEnumerable<SampleViewModel>
+
+<table>
+    <thead>
+        <tr>
+            <th>Dong Song Name</th>
+            <th>Phieu Lay Mau Date</th>
+            <th>Chat Name</th>
+            <th>Wo</th>
+            <th>Qo</th>
+            <th>WQI</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DongSongName</td>
+                <td>@item.PhieuLayMauDate.ToShortDateString()</td>
+                <td>@item.ChatName</td>
+                <td>@item.Wo</td>
+                <td>@item.Qo</td>
+                <td>@item.WQI</td>
+            </tr>
+        }
+    </tbody>
+</table>
