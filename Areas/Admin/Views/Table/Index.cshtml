@@ -1,27 +1,74 @@
-﻿@model IEnumerable<SampleViewModel>
+﻿@model IEnumerable<DACS.Models.SampleViewModel>
 
-<table>
-    <thead>
-        <tr>
-            <th>Dong Song Name</th>
-            <th>Phieu Lay Mau Date</th>
-            <th>Chat Name</th>
-            <th>Wo</th>
-            <th>Qo</th>
-            <th>WQI</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.DongSongName</td>
-                <td>@item.PhieuLayMauDate.ToShortDateString()</td>
-                <td>@item.ChatName</td>
-                <td>@item.Wo</td>
-                <td>@item.Qo</td>
-                <td>@item.WQI</td>
-            </tr>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sample Data</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        table.table-bordered th, table.table-bordered td {
+            border: 1px solid #dee2e6;
         }
-    </tbody>
-</table>
+
+        table.table-bordered th {
+            background-color: #343a40;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Sample Data</h1>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Dong Song</th>
+                        <th>Vi Tri</th>
+                        <th>Date</th>
+                        <th>Wo</th>
+                        <th>Qo</th>
+
+                        @if (Model.Any())
+                        {
+                            @foreach (var chatName in Model.First().ChatValues.Keys)
+                            {
+                                <th>@chatName</th>
+                            }
+                        }
+                        <th>WQI</th>
+                        <th>Muc Do O Nhiem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.DongSongName</td>
+                            <td>@item.ViTriLayMau</td>
+                            <td>@item.PhieuLayMauDate.ToShortDateString()</td>
+                            <td>@item.Wo</td>
+                            <td>@item.Qo</td>
+
+                            @foreach (var chatValue in item.ChatValues)
+                            {
+                                <td>@(chatValue.Value?.ToString() ?? "null")</td>
+                            }
+                            <td>@item.WQI</td>
+                            <td>@item.MucDo</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <a href="@Url.Action("Add", "Table")">
+        <button class="btn btn-primary">Add Sample</button>
+    </a>
+
+    <!-- Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

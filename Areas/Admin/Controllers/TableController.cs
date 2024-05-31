@@ -4,7 +4,9 @@ using DACS.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using YourNamespace;
 
 namespace DACS.Areas.Admin.Controllers
 {
@@ -23,26 +25,46 @@ namespace DACS.Areas.Admin.Controllers
         }
 
 
-        /*public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
-            var model = (from phieuLayMau in _context.PhieuLayMaus
-                         join ctPhieuLayMau in _context.CTPhieuLayMaus on phieuLayMau.Id equals ctPhieuLayMau.PhieuLayMauId
-                         join viTriLayMau in _context.ViTriLayMaus on ctPhieuLayMau.ViTriLayMauId equals viTriLayMau.Id
-                         join dongSong in _context.DongSongs on viTriLayMau.DongSong.Id equals dongSong.Id
-                         join ctcacChat in _context.CTCacChats on ctPhieuLayMau.CTPhieuLayMauId equals ctcacChat.CTPhieuLayMauId
-                         join chat in _context.Chats on ctcacChat.ChatId equals chat.Id
-                         select new TableViewModel
-                         {
-                             DongSongName = dongSong.Name,
-                             PhieuLayMauDate = phieuLayMau.Date,
-                             ChatName = chat.Name,
-                             Wo = phieuLayMau.Wo,
-                             Qo = phieuLayMau.Qo,
-                             WQI = ctcacChat.WQI
-                         }).ToList();
+            // Get all chat names
+            var allChats = _context.Chats.Select(c => c.Name).ToList();
 
-            return View(model);
-        }*/
+            var samples = _context.CTCacChats
+                .Include(ct => ct.Chat)
+                .Include(ct => ct.PhieuLayMau)
+                    .ThenInclude(plm => plm.ViTriLayMau)
+                        .ThenInclude(vtlm => vtlm.DongSong)
+                .ToList();
+
+            var groupedSamples = samples.GroupBy(s => new
+            {
+                s.PhieuLayMau.ViTriLayMau.DongSong.Name,
+                ViTriLayMau = s.PhieuLayMau.ViTriLayMau.Id, // assuming Id or some unique identifier for ViTriLayMau
+                s.PhieuLayMau.Date,
+                s.PhieuLayMau.Wo,
+                s.PhieuLayMau.Qo,
+                s.WQI,
+                s.MucDoONhiem
+            })
+            .Select(g => new SampleViewModel
+            {
+                DongSongName = g.Key.Name,
+                ViTriLayMau = g.Key.ViTriLayMau,
+                PhieuLayMauDate = g.Key.Date,
+                Wo = g.Key.Wo,
+                Qo = g.Key.Qo,
+                WQI = g.Key.WQI,
+                MucDo = g.Key.MucDoONhiem,
+                ChatValues = allChats.ToDictionary(
+                    chatName => chatName,
+                    chatName => g.FirstOrDefault(ct => ct.Chat.Name == chatName)?.GiaTri
+                )
+            })
+            .ToList();
+
+            return View(groupedSamples);
+        }
 
         public async Task<IActionResult> Test()
         {
@@ -71,7 +93,82 @@ namespace DACS.Areas.Admin.Controllers
             return View(model);
         }
 
+
+        // GET: /Table/Add
+        public IActionResult Add()
+        {
+            var model = new AddSampleViewModel
+            {
+                DongSongs = _context.DongSongs.Select(ds => new SelectListItem
+                {
+                    Value = ds.Id.ToString(),
+                    Text = ds.Name
+                }).ToList(),
+                ViTriLayMaus = _context.ViTriLayMaus.Select(vt => new SelectListItem
+                {
+                    Value = vt.Id.ToString(),
+                    Text = vt.Id.ToString() // Assuming there is a Name property
+                }).ToList(),
+                ChatValues = _context.Chats.ToDictionary(c => c.Name, c => (float?)null)
+            };
+
+            return View(model);
+        }
+
+        // POST: /Table/Add
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Add(AddSampleViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.DongSongs = _context.DongSongs.Select(ds => new SelectListItem
+                {
+                    Value = ds.Id.ToString(),
+                    Text = ds.Name
+                }).ToList();
+                model.ViTriLayMaus = _context.ViTriLayMaus.Select(vt => new SelectListItem
+                {
+                    Value = vt.Id.ToString(),
+                    Text = vt.Id.ToString() // Assuming there is a Name property
+                }).ToList();
+                model.ChatValues = _context.Chats.ToDictionary(c => c.Name, c => model.ChatValues.ContainsKey(c.Name) ? model.ChatValues[c.Name] : (float?)null);
+                return View(model);
+            }
+
+            var phieuLayMau = new PhieuLayMau
+            {
+                Date = model.Date,
+                Wo = model.Wo,
+                Qo = model.Qo,
+                EmployeeId = model.EmployeeId,
+                ViTriLayMauId = model.ViTriLayMauId
+            };
+
+            _context.PhieuLayMaus.Add(phieuLayMau);
+            _context.SaveChanges();
+
+            foreach (var chatValue in model.ChatValues)
+            {
+                var chatId = _context.Chats.FirstOrDefault(c => c.Name == chatValue.Key)?.Id;
+                if (chatId == null) continue;
+
+                var ctCacChat = new CTCacChat
+                {
+                    PhieuLayMauId = phieuLayMau.Id,
+                    ChatId = chatId.Value,
+                    GiaTri = chatValue.Value ?? 0,
+                    WQI = model.WQI ?? 0,
+                    MucDoONhiem = model.MucDoONhiem
+                };
+
+                _context.CTCacChats.Add(ctCacChat);
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
     }
-
-
 }
