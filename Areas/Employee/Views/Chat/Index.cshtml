@@ -1,0 +1,77 @@
+﻿@model IEnumerable<DACS.Models.Chat>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Index";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên Dòng Sông</th>
+            <th>Vị Trí Lấy Mẫu</th>
+            <th>Thời Điểm</th>
+            @foreach (var chat in Model)
+            {
+                <th>@chat.Name</th>
+            }
+            <th>Wo</th>
+            <th>Qo</th>
+            <th>Employee</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var phieuGroup in Model.SelectMany(c => c.CTCacChats)
+        .GroupBy(ctc => ctc.PhieuLayMauId))
+        {
+            var firstCtc = phieuGroup.First();
+            <tr>
+                <td>@firstCtc.PhieuLayMau.ViTriLayMau.DongSong.Name</td>
+                <td>@firstCtc.PhieuLayMau.ViTriLayMauId</td>
+                <td>@firstCtc.PhieuLayMau.Date.ToString("dd/MM/yyyy")</td>
+                @foreach (var chat in Model)
+                {
+                    var ctc = chat.CTCacChats.FirstOrDefault(ct => ct.PhieuLayMauId == firstCtc.PhieuLayMauId);
+                    if (ctc != null)
+                    {
+                        <td>@ctc.GiaTri</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                }
+                <td>@firstCtc.PhieuLayMau.Wo</td>
+                <td>@firstCtc.PhieuLayMau.Qo</td>
+                <td>
+                    @if (firstCtc.PhieuLayMau.Employee != null && firstCtc.PhieuLayMau.Employee.FullName != null)
+                    {
+                        @firstCtc.PhieuLayMau.Employee.FullName
+                    }
+                    else
+                    {
+                        <text>N/A</text>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
