@@ -1,0 +1,33 @@
+﻿@model IEnumerable<DACS.Models.CTCacChat>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Nhập giá trị cho các chất";
+    var chats = ViewBag.Chats as List<DACS.Models.Chat>;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="CreateCTCacChat" method="post" class="needs-validation" novalidate>
+    <input type="hidden" name="phieuLayMauId" value="@ViewBag.PhieuLayMauId" />
+    <div class="card">
+        <div class="card-body">
+            @foreach (var chat in chats)
+            {
+                <div class="form-group">
+                    <label for="@($"GiaTri_{chat.Id}")">@chat.Name</label>
+                    <input type="hidden" name="@($"CTCacChats[{chat.Id}].ChatId")" value="@chat.Id" />
+                    <input type="hidden" name="@($"CTCacChats[{chat.Id}].PhieuLayMauId")" value="@ViewBag.PhieuLayMauId" />
+                    <input type="number" class="form-control" id="@($"GiaTri_{chat.Id}")" name="@($"CTCacChats[{chat.Id}].GiaTri")" min="0" step="any" required>
+                    <div class="invalid-feedback">
+                        Please enter a valid non-negative number.
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+</form>
