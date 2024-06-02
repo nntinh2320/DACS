@@ -25,10 +25,4 @@
     <Folder Include="Areas\Employee\Data\" />
     <Folder Include="Areas\Employee\Models\" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Areas\Admin\Views\Table\AddDongSong.cshtml" />
-    <None Include="Areas\Admin\Views\Table\Test.cshtml" />
-  </ItemGroup>
-
 </Project>
