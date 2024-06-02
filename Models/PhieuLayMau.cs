@@ -11,8 +11,11 @@ namespace DACS.Models
         public float Wo {  get; set; }
         [Required]
         public float Qo {  get; set; }
+        public string? EmployeeId { get; set; }
+        public ApplicationUser? Employee { get; set; }
+
         [Required]
-        public string EmployeeId { get; set; }
-        public ApplicationUser Employee { get; set; }
+        public string ViTriLayMauId { get; set; }
+        public ViTriLayMau? ViTriLayMau { get; set; }
     }
 }

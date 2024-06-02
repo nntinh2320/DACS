@@ -11,7 +11,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Chat> Chats { get; set; }
     public DbSet<CTCacChat> CTCacChats { get; set; }
-    public DbSet<CTPhieuLayMau> CTPhieuLayMaus { get; set; }
     public DbSet<DongSong> DongSongs { get; set; }
     public DbSet<PhieuLayMau> PhieuLayMaus { get; set; }
     public DbSet<ViTriLayMau> ViTriLayMaus { get; set; }
