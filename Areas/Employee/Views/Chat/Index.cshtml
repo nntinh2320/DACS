@@ -2,11 +2,21 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "";
 }
 
-<h2>@ViewData["Title"]</h2>
 
+@using (Html.BeginForm())
+{
+    <div style="position: relative;">
+        <input type="text" id="txtSearchPlaceholder" placeholder="Tìm sông hoặc vị trí" style="position:
+    absolute; background-color: transparent; color: #ccc; z-index: -1; width:
+    50%;" disabled />
+        <input type="text" id="txtSearchca" name="searchString" style="position:
+    relative; background-color: transparent; z-index: 1; width: 50%;" /><input type="submit" value="Tìm kiếm" />
+    </div>
+}
+<h2>@ViewData["Title"]</h2>
 <table class="table">
     <thead>
         <tr>
@@ -19,43 +29,65 @@
             }
             <th>Wo</th>
             <th>Qo</th>
-            <th>Employee</th>
+            <th>WQI</th>
+            <th>Mức độ ô nhiễm</th>
+            <th>Nhân viên</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var phieuGroup in Model.SelectMany(c => c.CTCacChats)
-        .GroupBy(ctc => ctc.PhieuLayMauId))
+        @foreach (var riverGroup in Model.SelectMany(c => c.CTCacChats)
+        .GroupBy(ctc => ctc.PhieuLayMau.ViTriLayMau.DongSong.Name))
         {
-            var firstCtc = phieuGroup.First();
-            <tr>
-                <td>@firstCtc.PhieuLayMau.ViTriLayMau.DongSong.Name</td>
-                <td>@firstCtc.PhieuLayMau.ViTriLayMauId</td>
-                <td>@firstCtc.PhieuLayMau.Date.ToString("dd/MM/yyyy")</td>
-                @foreach (var chat in Model)
-                {
-                    var ctc = chat.CTCacChats.FirstOrDefault(ct => ct.PhieuLayMauId == firstCtc.PhieuLayMauId);
-                    if (ctc != null)
+            var riverGroupList = riverGroup.GroupBy(ctc => ctc.PhieuLayMauId).ToList();
+            var riverNameDisplayed = false;
+
+            foreach (var phieuGroup in riverGroupList)
+            {
+                var firstCtc = phieuGroup.First();
+                <tr>
+                    @if (!riverNameDisplayed)
                     {
-                        <td>@ctc.GiaTri</td>
+                        <td rowspan="@riverGroupList.Count">@firstCtc.PhieuLayMau.ViTriLayMau.DongSong.Name</td>
+                        riverNameDisplayed = true;
                     }
-                    else
+
+                    <td>@firstCtc.PhieuLayMau.ViTriLayMauId</td>
+                    <td>@firstCtc.PhieuLayMau.Date.ToString("dd/MM/yyyy")</td>
+                    @foreach (var chat in Model)
                     {
-                        <td></td>
+                        var ctc = chat.CTCacChats.FirstOrDefault(ct => ct.PhieuLayMauId == firstCtc.PhieuLayMauId);
+                        if (ctc != null)
+                        {
+                            <td>@ctc.GiaTri</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
                     }
-                }
-                <td>@firstCtc.PhieuLayMau.Wo</td>
-                <td>@firstCtc.PhieuLayMau.Qo</td>
-                <td>
-                    @if (firstCtc.PhieuLayMau.Employee != null && firstCtc.PhieuLayMau.Employee.FullName != null)
-                    {
-                        @firstCtc.PhieuLayMau.Employee.FullName
-                    }
-                    else
-                    {
-                        <text>N/A</text>
-                    }
-                </td>
-            </tr>
+                    <td>@firstCtc.PhieuLayMau.Wo</td>
+                    <td>@firstCtc.PhieuLayMau.Qo</td>
+                    <td>@firstCtc.WQI</td>
+                    <td>@firstCtc.MucDoONhiem</td>
+                    <td>
+                        @if (firstCtc.PhieuLayMau.Employee != null && firstCtc.PhieuLayMau.Employee.FullName != null)
+                        {
+                            @firstCtc.PhieuLayMau.Employee.FullName
+                        }
+                        else
+                        {
+                            <text>N/A</text>
+                        }
+                    </td>
+                    <td>
+                        <form asp-action="EditCTCacChat" asp-controller="Chat" asp-area="Employee" method="get">
+                            <input type="hidden" name="ctcacChatId" value="@firstCtc.CTCacChatId" />
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        </form>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>

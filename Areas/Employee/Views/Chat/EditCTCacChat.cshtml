@@ -1,0 +1,102 @@
+﻿@model Tuple<DACS.Models.PhieuLayMau, List<DACS.Models.CTCacChat>>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Chỉnh sửa phiếu lấy mẫu";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="UpdateCTCacChat" asp-area="Employee" asp-controller="Chat" method="post" class="needs-validation" novalidate>
+    <input type="hidden" asp-for="Item1.Id" />
+    <input type="hidden" asp-for="Item1.ViTriLayMauId" />
+    <input type="hidden" asp-for="Item1.Wo" />
+    <input type="hidden" asp-for="Item1.Qo" />
+
+    <div class="form-group">
+        <label for="DongSongId">Dòng sông: </label>
+        <select id="DongSongId" class="form-control" asp-for="Item1.ViTriLayMau.DongSongId" onchange="loadViTriLayMau()" required>
+            <option value="">-- Select Dong Song --</option>
+            @foreach (var dongSong in ViewBag.DongSongs)
+            {
+                <option value="@dongSong.Id" @(dongSong.Id == Model.Item1.ViTriLayMau.DongSongId ? "selected" : "")>@dongSong.Name</option>
+            }
+        </select>
+        <div class="invalid-feedback">
+            Please select a Dong Song.
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="ViTriLayMauId">Vị trí lấy mẫu: </label>
+        <select asp-for="Item1.ViTriLayMauId" id="ViTriLayMauId" class="form-control" required>
+            <option value="">-- Select Vi Tri Lay Mau --</option>
+            @foreach (var viTriLayMau in ViewBag.ViTriLayMaus)
+            {
+                <option value="@viTriLayMau.Id" @(viTriLayMau.Id == Model.Item1.ViTriLayMauId ? "selected" : "")>@viTriLayMau.Name</option>
+            }
+        </select>
+        <div class="invalid-feedback">
+            Please select a Vi Tri Lay Mau.
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Wo">Wo</label>
+        <input type="number" asp-for="Item1.Wo" class="form-control" id="Wo" min="0" step="any" required>
+        <div class="invalid-feedback">
+            Please enter a valid non-negative number.
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Qo">Qo</label>
+        <input type="number" asp-for="Item1.Qo" class="form-control" id="Qo" min="0" step="any" required>
+        <div class="invalid-feedback">
+            Please enter a valid non-negative number.
+        </div>
+    </div>
+
+    <h3>Nhập giá trị cho các chất</h3>
+    <div class="card">
+        <div class="card-body">
+            @for (var i = 0; i < Model.Item2.Count; i++)
+            {
+                <div class="form-group">
+                    <label for="@($"GiaTri_{Model.Item2[i].ChatId}")">@Model.Item2[i].Chat.Name</label>
+                    <input type="hidden" asp-for="Item2[i].Id" />
+                    <input type="hidden" asp-for="Item2[i].ChatId" />
+                    <input type="hidden" asp-for="Item2[i].PhieuLayMauId" />
+                    <input type="number" class="form-control" asp-for="Item2[i].GiaTri" id="@($"GiaTri_{Model.Item2[i].ChatId}")" min="0" step="any" required>
+                    <div class="invalid-feedback">
+                        Please enter a valid non-negative number.
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Lưu</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script type="text/javascript">
+        function loadViTriLayMau() {
+            var dongSongId = $("#DongSongId").val();
+            $.ajax({
+                type: "GET",
+                url: "/Employee/Chat/GetViTriLayMaus",
+                data: { dongSongId: dongSongId },
+                success: function (data) {
+                    var options = '<option value="">-- Select Vi Tri Lay Mau --</option>';
+                    $.each(data, function (index, item) {
+                        options += '<option value="' + item.id + '">' + item.name + '</option>';
+                    });
+                    $("#ViTriLayMauId").html(options);
+                }
+            });
+        }
+    </script>
+}
