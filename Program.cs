@@ -35,6 +35,10 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IEmployeeRepository, EFEmployeeRepository>();
 builder.Services.AddScoped<IChatRepository, EFChatRepository>();
+builder.Services.AddScoped<ICTCacChatRepository, EFCTCacChatRepository>();
+builder.Services.AddScoped<IPhieuLayMauRepository, EFPhieuLayMauRepository>();
+
+
 //builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Add services to the container.
