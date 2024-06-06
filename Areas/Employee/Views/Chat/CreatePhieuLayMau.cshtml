@@ -7,9 +7,11 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="CreatePhieuLayMau" method="post" class="needs-validation" novalidate>
+<form asp-action="CreatePhieuLayMau" asp-area="Employee" asp-controller="Chat" method="post" class="needs-validation" novalidate>
     <div class="form-group">
-        <label for="DongSongId">Dong Song</label>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Date" value="@DateTime.Now" />
+        <label for="DongSongId">Dòng sông: </label>
         <select id="DongSongId" class="form-control" name="DongSongId" onchange="loadViTriLayMau()" required>
             <option value="">-- Select Dong Song --</option>
             @foreach (var dongSong in ViewBag.DongSongs)
@@ -21,9 +23,8 @@
             Please select a Dong Song.
         </div>
     </div>
-
     <div class="form-group">
-        <label for="ViTriLayMauId">Vi Tri Lay Mau</label>
+        <label for="ViTriLayMauId">Vị trí lấy mẫu: </label>
         <select asp-validation-for="ViTriLayMauId" id="ViTriLayMauId" class="form-control" name="ViTriLayMauId" required>
             <option value="">-- Select Vi Tri Lay Mau --</option>
         </select>
@@ -31,7 +32,6 @@
             Please select a Vi Tri Lay Mau.
         </div>
     </div>
-
     <div class="form-group">
         <label for="Wo">Wo</label>
         <input type="number" asp-validation-for="Wo" class="form-control" id="Wo" name="Wo" min="0" step="any" required>
@@ -47,14 +47,13 @@
             Please enter a valid non-negative number.
         </div>
     </div>
-
     <div class="form-group">
-        <label for="EmployeeId">Employee ID</label>
+        <label for="EmployeeId">Nhân viên: </label>
         <input type="text" class="form-control" id="EmployeeId" name="EmployeeId" value="@User.Identity.Name" readonly>
     </div>
 
     <div class="form-group mt-3">
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary">Tạo phiếu</button>
     </div>
 </form>
 
