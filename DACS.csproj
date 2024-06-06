@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -35,8 +35,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Employee\Data\" />
+    <Folder Include="Areas\Employee\Models\" />
     <None Include="Areas\Admin\Views\Employee\ResetPassword.cshtml" />
     <None Include="Areas\Admin\Views\Employee\ResetPasswordConfirmation.cshtml" />
   </ItemGroup>
-
 </Project>
