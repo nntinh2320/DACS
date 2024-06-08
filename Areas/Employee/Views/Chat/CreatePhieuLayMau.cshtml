@@ -1,0 +1,78 @@
+﻿@model DACS.Models.PhieuLayMau
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Tạo phiếu lấy mẫu";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="CreatePhieuLayMau" asp-area="Employee" asp-controller="Chat" method="post" class="needs-validation" novalidate>
+    <div class="form-group">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Date" value="@DateTime.Now" />
+        <label for="DongSongId">Dòng sông: </label>
+        <select id="DongSongId" class="form-control" name="DongSongId" onchange="loadViTriLayMau()" required>
+            <option value="">-- Select Dong Song --</option>
+            @foreach (var dongSong in ViewBag.DongSongs)
+            {
+                <option value="@dongSong.Id">@dongSong.Name</option>
+            }
+        </select>
+        <div class="invalid-feedback">
+            Please select a Dong Song.
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="ViTriLayMauId">Vị trí lấy mẫu: </label>
+        <select asp-validation-for="ViTriLayMauId" id="ViTriLayMauId" class="form-control" name="ViTriLayMauId" required>
+            <option value="">-- Select Vi Tri Lay Mau --</option>
+        </select>
+        <div class="invalid-feedback">
+            Please select a Vi Tri Lay Mau.
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Wo">Wo</label>
+        <input type="number" asp-validation-for="Wo" class="form-control" id="Wo" name="Wo" min="0" step="any" required>
+        <div class="invalid-feedback">
+            Please enter a valid non-negative number.
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Qo">Qo</label>
+        <input type="number" asp-validation-for="Qo" class="form-control" id="Qo" name="Qo" min="0" step="any" required>
+        <div class="invalid-feedback">
+            Please enter a valid non-negative number.
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="EmployeeId">Nhân viên: </label>
+        <input type="text" class="form-control" id="EmployeeId" name="EmployeeId" value="@User.Identity.Name" readonly>
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Tạo phiếu</button>
+    </div>
+</form>
+
+@section Scripts {
+    <script type="text/javascript">
+        function loadViTriLayMau() {
+            var dongSongId = $("#DongSongId").val();
+            $.ajax({
+                type: "GET",
+                url: "/Employee/Chat/GetViTriLayMaus",
+                data: { dongSongId: dongSongId },
+                success: function (data) {
+                    var options = '<option value="">-- Select Vi Tri Lay Mau --</option>';
+                    $.each(data, function (index, item) {
+                        options += '<option value="' + item.id + '">' + item.id + '</option>';
+                    });
+                    $("#ViTriLayMauId").html(options);
+                }
+            });
+        }
+    </script>
+}

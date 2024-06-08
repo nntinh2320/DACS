@@ -35,6 +35,10 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IEmployeeRepository, EFEmployeeRepository>();
 builder.Services.AddScoped<IChatRepository, EFChatRepository>();
+builder.Services.AddScoped<ICTCacChatRepository, EFCTCacChatRepository>();
+builder.Services.AddScoped<IPhieuLayMauRepository, EFPhieuLayMauRepository>();
+
+
 //builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Add services to the container.
@@ -61,7 +65,9 @@ app.MapRazorPages();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(name: "Admin", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
+    endpoints.MapControllerRoute(
+            name: "Employee",
+            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
     endpoints.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 });
 app.Run();
