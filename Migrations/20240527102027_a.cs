@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DACS.Migrations
 {
     /// <inheritdoc />
-    public partial class Identity : Migration
+    public partial class a : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -186,28 +186,6 @@ namespace DACS.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PhieuLayMaus",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Wo = table.Column<float>(type: "real", nullable: false),
-                    Qo = table.Column<float>(type: "real", nullable: false),
-                    EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PhieuLayMaus", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PhieuLayMaus_AspNetUsers_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ViTriLayMaus",
                 columns: table => new
                 {
@@ -226,24 +204,27 @@ namespace DACS.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CTPhieuLayMaus",
+                name: "PhieuLayMaus",
                 columns: table => new
                 {
-                    CTPhieuLayMauId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PhieuLayMauId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Wo = table.Column<float>(type: "real", nullable: false),
+                    Qo = table.Column<float>(type: "real", nullable: false),
+                    EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ViTriLayMauId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CTPhieuLayMaus", x => x.CTPhieuLayMauId);
+                    table.PrimaryKey("PK_PhieuLayMaus", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CTPhieuLayMaus_PhieuLayMaus_PhieuLayMauId",
-                        column: x => x.PhieuLayMauId,
-                        principalTable: "PhieuLayMaus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_PhieuLayMaus_AspNetUsers_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_CTPhieuLayMaus_ViTriLayMaus_ViTriLayMauId",
+                        name: "FK_PhieuLayMaus_ViTriLayMaus_ViTriLayMauId",
                         column: x => x.ViTriLayMauId,
                         principalTable: "ViTriLayMaus",
                         principalColumn: "Id",
@@ -259,21 +240,21 @@ namespace DACS.Migrations
                     WQI = table.Column<float>(type: "real", nullable: false),
                     MucDoONhiem = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ChatId = table.Column<int>(type: "int", nullable: false),
-                    CTPhieuLayMauId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    PhieuLayMauId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CTCacChats", x => x.CTCacChatId);
                     table.ForeignKey(
-                        name: "FK_CTCacChats_CTPhieuLayMaus_CTPhieuLayMauId",
-                        column: x => x.CTPhieuLayMauId,
-                        principalTable: "CTPhieuLayMaus",
-                        principalColumn: "CTPhieuLayMauId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_CTCacChats_Chats_ChatId",
                         column: x => x.ChatId,
                         principalTable: "Chats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CTCacChats_PhieuLayMaus_PhieuLayMauId",
+                        column: x => x.PhieuLayMauId,
+                        principalTable: "PhieuLayMaus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -323,24 +304,19 @@ namespace DACS.Migrations
                 column: "ChatId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CTCacChats_CTPhieuLayMauId",
+                name: "IX_CTCacChats_PhieuLayMauId",
                 table: "CTCacChats",
-                column: "CTPhieuLayMauId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CTPhieuLayMaus_PhieuLayMauId",
-                table: "CTPhieuLayMaus",
                 column: "PhieuLayMauId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CTPhieuLayMaus_ViTriLayMauId",
-                table: "CTPhieuLayMaus",
-                column: "ViTriLayMauId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PhieuLayMaus_EmployeeId",
                 table: "PhieuLayMaus",
                 column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PhieuLayMaus_ViTriLayMauId",
+                table: "PhieuLayMaus",
+                column: "ViTriLayMauId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ViTriLayMaus_DongSongId",
@@ -373,19 +349,16 @@ namespace DACS.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "CTPhieuLayMaus");
-
-            migrationBuilder.DropTable(
                 name: "Chats");
 
             migrationBuilder.DropTable(
                 name: "PhieuLayMaus");
 
             migrationBuilder.DropTable(
-                name: "ViTriLayMaus");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "ViTriLayMaus");
 
             migrationBuilder.DropTable(
                 name: "DongSongs");

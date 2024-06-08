@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using DACS.Data;
 using DACS.Models;
 using DACS.Repositories;
+using WebsiteFashion.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDistributedMemoryCache();
@@ -34,6 +35,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IEmployeeRepository, EFEmployeeRepository>();
+builder.Services.AddScoped<IPhieuLayMauRepository, EFPhieuLayMauRepository>();
+
 builder.Services.AddScoped<IChatRepository, EFChatRepository>();
 //builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 

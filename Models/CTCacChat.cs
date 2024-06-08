@@ -4,7 +4,7 @@ namespace DACS.Models
 {
     public class CTCacChat
     {
-        public string CTCacChatId {  get; set; }
+        public int CTCacChatId {  get; set; }
         public float GiaTri {  get; set; }
         public float WQI { get; set; }
         public string? MucDoONhiem { get; set; }

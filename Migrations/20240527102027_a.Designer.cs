@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DACS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240521095503_Identity")]
-    partial class Identity
+    [Migration("20240527102027_a")]
+    partial class a
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,10 +108,6 @@ namespace DACS.Migrations
                     b.Property<string>("CTCacChatId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CTPhieuLayMauId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("ChatId")
                         .HasColumnType("int");
 
@@ -121,37 +117,19 @@ namespace DACS.Migrations
                     b.Property<string>("MucDoONhiem")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PhieuLayMauId")
+                        .HasColumnType("int");
+
                     b.Property<float>("WQI")
                         .HasColumnType("real");
 
                     b.HasKey("CTCacChatId");
 
-                    b.HasIndex("CTPhieuLayMauId");
-
                     b.HasIndex("ChatId");
-
-                    b.ToTable("CTCacChats");
-                });
-
-            modelBuilder.Entity("DACS.Models.CTPhieuLayMau", b =>
-                {
-                    b.Property<string>("CTPhieuLayMauId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("PhieuLayMauId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ViTriLayMauId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CTPhieuLayMauId");
 
                     b.HasIndex("PhieuLayMauId");
 
-                    b.HasIndex("ViTriLayMauId");
-
-                    b.ToTable("CTPhieuLayMaus");
+                    b.ToTable("CTCacChats");
                 });
 
             modelBuilder.Entity("DACS.Models.Chat", b =>
@@ -199,11 +177,14 @@ namespace DACS.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EmployeeId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<float>("Qo")
                         .HasColumnType("real");
+
+                    b.Property<string>("ViTriLayMauId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<float>("Wo")
                         .HasColumnType("real");
@@ -211,6 +192,8 @@ namespace DACS.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
+
+                    b.HasIndex("ViTriLayMauId");
 
                     b.ToTable("PhieuLayMaus");
                 });
@@ -366,30 +349,28 @@ namespace DACS.Migrations
 
             modelBuilder.Entity("DACS.Models.CTCacChat", b =>
                 {
-                    b.HasOne("DACS.Models.CTPhieuLayMau", "CTPhieuLayMau")
-                        .WithMany()
-                        .HasForeignKey("CTPhieuLayMauId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DACS.Models.Chat", "Chat")
                         .WithMany()
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CTPhieuLayMau");
-
-                    b.Navigation("Chat");
-                });
-
-            modelBuilder.Entity("DACS.Models.CTPhieuLayMau", b =>
-                {
                     b.HasOne("DACS.Models.PhieuLayMau", "PhieuLayMau")
                         .WithMany()
                         .HasForeignKey("PhieuLayMauId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("PhieuLayMau");
+                });
+
+            modelBuilder.Entity("DACS.Models.PhieuLayMau", b =>
+                {
+                    b.HasOne("DACS.Models.ApplicationUser", "Employee")
+                        .WithMany("PhieuLayMau")
+                        .HasForeignKey("EmployeeId");
 
                     b.HasOne("DACS.Models.ViTriLayMau", "ViTriLayMau")
                         .WithMany()
@@ -397,20 +378,9 @@ namespace DACS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PhieuLayMau");
+                    b.Navigation("Employee");
 
                     b.Navigation("ViTriLayMau");
-                });
-
-            modelBuilder.Entity("DACS.Models.PhieuLayMau", b =>
-                {
-                    b.HasOne("DACS.Models.ApplicationUser", "Employee")
-                        .WithMany("PhieuLayMau")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("DACS.Models.ViTriLayMau", b =>
